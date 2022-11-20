@@ -8,6 +8,6 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(require('./src/routes/index'));
+app.use(require('./src/routes/routes'));
 
-app.listen(port, ()=> console.log('escuchando 3000'));
+app.listen(port, ()=> console.log(`escuchando ${port}`));

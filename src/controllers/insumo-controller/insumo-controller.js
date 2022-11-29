@@ -6,12 +6,34 @@ const getInsumos = async (req, res) => {
 }
 
 const getInsumoById = async (req, res) => {
-    const idinsumo = req.params.id;
+    const id = req.params.id;
 
-    const query = `SELECT * FROM INSUMOS WHERE IDINSUMO = ${idinsumo}`;
+    const query = `select * from insumos where idinsumo = ${id}`;
 
     const response = await pool.query(query);
     res.status(200).json(response.rows[0]);
+}
+
+const getInsumoByRecipeId = async (req, res) => {
+    const id = req.params.id;
+    try{
+        console.log(id)
+        pool
+        .query(`select insumos.insumo, insumos.idinsumo, insumos.gramos from detallereceta join insumos on insumos.idinsumo = detallereceta.insumo where detallereceta.receta = $1`,[id])
+        .then(response => {
+            console.log('ola')
+            console.log(response.rows)
+            if(response.rows.length > 0){
+                res.status(200).json({res:response.rows})
+            }
+            else{
+                res.status(200).json({res:[]});
+            }
+        })
+        .catch(err => res.status(401).json({Error: err.message}))
+    } catch(e){
+        console.log(e);
+    }
 }
 
 const createInsumo = async (req, res) => {
@@ -86,8 +108,9 @@ const editInsumo = (req,res) => {
 
 module.exports = {
     getInsumos,
-    getInsumoById,
     createInsumo,
     deleteInsumoById,
-    editInsumo
+    editInsumo,
+    getInsumoByRecipeId,
+    getInsumoById
 }

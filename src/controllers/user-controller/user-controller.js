@@ -52,19 +52,22 @@ const userRegister = async (req, res, next) => {
     let hashPass = await bcryptjs.hash(pass, 10);
 
     try{
-        await pool.query('SELECT * FROM users where email = $1', [email])
+        await pool
+        .query('SELECT * FROM users where email = $1', [email])
         .then(results => {
             if(results.rows.length > 0) {
-                res.status(401).json({Error: 'Email ingresado ya se encuentra registrado'});
+                res.status(400).json({Error: 'Email ingresado ya se encuentra registrado'});
+            } else {
+                pool
+                .query(`INSERT INTO USERS (nombre, email, pass) VALUES ($1, $2, $3)`, [nombre, email, hashPass])
+                .then(results => res.status(200).send({Res: 'Usuario registrado'}))
+                .catch(err => res.status(401).json({Error: err.message}))
             }
-
-            pool.query(`INSERT INTO USERS (nombre, email, pass) VALUES ($1, $2, $3)`, [nombre, email, hashPass])
-            .then(results => res.status(200).send({results})).catch(
-                err => res.status(401).json({Error: err.message})
-            )
-        }).catch(err => res.status(401).json({Error: err.message}))
+            
+        })
+        .catch(err => res.status(401).json({Error: err.message}))
     } catch(e) {
-        next(e);
+        console.log(e)
     }
 }
 

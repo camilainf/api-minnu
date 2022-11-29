@@ -2,18 +2,19 @@ const {Router} = require('express');
 const router = Router();
 const tokenValidator = require('../middlewares/tokenValidator');
 
-const { getInsumos, getInsumoById, getRecetas, getRecetaById} = require('../controllers/index.controller');
 const { userLogin, userRegister } = require('../controllers/user-controller/user-controller');
 const { agregarRegimen } = require('../controllers/regimen-controller/regimen-controller');
 const { getRegimenes } = require('../controllers/regimen-controller/regimen-controller');
 const { eliminarRegimenById } = require('../controllers/regimen-controller/regimen-controller');
-const { deleteInsumoById, createInsumo, editInsumo } = require('../controllers/insumo-controller/insumo-controller');
+const { deleteInsumoById, createInsumo, editInsumo, getInsumos, getInsumoByRecipeId, getInsumoById } = require('../controllers/insumo-controller/insumo-controller');
 const { getTiposRecetas, getTipoRecetaById } = require('../controllers/tiposrecetas-controller/tiposrecetas.controller');
+const { getRecetas, getRecetaById } = require('../controllers/receta-controller/receta-controller');
 
 
 // INSUMOS
 router.get('/insumos', getInsumos);
 router.get('/insumos/:id', getInsumoById);
+router.get('/insumoss/:id', getInsumoByRecipeId);
 router.post('/insumos', tokenValidator ,createInsumo);
 router.delete('/insumos/', tokenValidator, deleteInsumoById);
 router.put('/insumos/', tokenValidator, editInsumo);

@@ -20,15 +20,17 @@ const userLogin = async (req, res, next) => {
                     const user = results.rows[0];
                     bcryptjs.compare(pass, user.pass, (err, isMatch) => {
                         if(err) {
+                            
                             res.status(401).send(console.log(err.stack));
                         }
-
                         if(isMatch) {
-                            const token = jwt.sign(user, process.env.SECRET_KEY)
+                            const token = jwt.sign(user, process.env.KEY)
                             res.status(200).send({user, token});
+                        } else {
+                            res.status(400).json({Error: 'Clave invalida'});
                         }
 
-                        res.status(401).json({Error: 'Clave invalida'});
+                        
                     })
                 } else {
                     res.status(401).send('El correo ingresado no se encuentra registrado')

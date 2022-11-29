@@ -17,12 +17,9 @@ const getInsumoById = async (req, res) => {
 const getInsumoByRecipeId = async (req, res) => {
     const id = req.params.id;
     try{
-        console.log(id)
         pool
         .query(`select insumos.insumo, insumos.idinsumo, insumos.gramos from detallereceta join insumos on insumos.idinsumo = detallereceta.insumo where detallereceta.receta = $1`,[id])
         .then(response => {
-            console.log('ola')
-            console.log(response.rows)
             if(response.rows.length > 0){
                 res.status(200).json({res:response.rows})
             }

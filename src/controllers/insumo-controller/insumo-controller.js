@@ -58,7 +58,7 @@ const createInsumo = async (req, res) => {
 }
 
 const deleteInsumoById = async (req, res) => {
-    const idinsumo = req.body.id;
+    const {idinsumo} = req.body;
 
     const query = `DELETE FROM INSUMOS WHERE IDINSUMO = ${idinsumo} RETURNING INSUMO`;
 

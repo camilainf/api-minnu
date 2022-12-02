@@ -1,6 +1,6 @@
-const pool = require('../config/db.config');
+const pool = require('../../config/db.config');
 
-const getMenu = async (req, res) => {
+const getMenus = async (req, res) => {
     const response = await pool.query('select * from menus');
     res.status(200).json(response.rows);
 }
@@ -15,6 +15,6 @@ const getMenuById = async (req, res) => {
 }
 
 module.exports = {
-    getMenu,
-    getMenuById,
+    getMenus,
+    getMenuById
 }

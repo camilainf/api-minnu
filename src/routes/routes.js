@@ -2,14 +2,22 @@ const {Router} = require('express');
 const router = Router();
 const tokenValidator = require('../middlewares/tokenValidator');
 
-const { userLogin, userRegister } = require('../controllers/user-controller/user-controller');
+
+const { userLogin, userRegister, getUsers } = require('../controllers/user-controller/user-controller');
 const { agregarRegimen } = require('../controllers/regimen-controller/regimen-controller');
 const { getRegimenes } = require('../controllers/regimen-controller/regimen-controller');
 const { eliminarRegimenById } = require('../controllers/regimen-controller/regimen-controller');
 const { deleteInsumoById, createInsumo, editInsumo, getInsumos, getInsumoByRecipeId, getInsumoById } = require('../controllers/insumo-controller/insumo-controller');
 const { getTiposRecetas, getTipoRecetaById } = require('../controllers/tiposrecetas-controller/tiposrecetas.controller');
 const { getRecetas, getRecetaById } = require('../controllers/receta-controller/receta-controller');
+const { getTiposMenus, getTipoMenuById, getTipoMenuByMenuID } = require('../controllers/tiposmenus-controller/tiposmenus.controller');
+const { getMenus, getMenuById } = require('../controllers/menu-controller/menu-controller');
 
+
+// USERS
+router.get('/users/', getUsers);
+router.post('/login/', userLogin);
+router.post('/users/', userRegister);
 
 // INSUMOS
 router.get('/insumos', getInsumos);
@@ -24,17 +32,25 @@ router.get('/recetas', getRecetas);
 router.get('/recetas/:id', getRecetaById);
 
 // REGIMENES
-router.post('/regimenes/', tokenValidator, agregarRegimen);
 router.get('/regimenes', getRegimenes);
-router.delete('/regimenes/:id', eliminarRegimenById);
+router.post('/regimenes/', tokenValidator, agregarRegimen);
+router.delete('/regimenes/:id',tokenValidator,  eliminarRegimenById);
 
 // TIPOS DE RECETAS
 router.get('/tiposrecetas', getTiposRecetas);
 router.get('/tiposrecetas/:id', getTipoRecetaById);
 
-// USERS
-router.post('/login/', userLogin);
-router.post('/users/', userRegister);
+// TIPOS MENUS
+router.get('/tiposmenus', getTiposMenus);
+router.get('/tiposmenus/:id', getTipoMenuById);
+router.get('/tiposmenus/menu/:id', getTipoMenuByMenuID); 
+
+// MENUS
+router.get('/menus', getMenus);
+router.get('/menus/:id', getMenuById);
+
+
+
 
 // NOT FOUND
 router.use((req,res,next)=>{

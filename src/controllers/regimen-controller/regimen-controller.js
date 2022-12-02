@@ -14,6 +14,25 @@ const getRegimenById = async (req, res) => {
     res.status(200).json(response.rows[0]);
 }
 
+const getRegimenByMenuId = async ( req, res ) => {
+    const { id }= req.params;
+    try{
+        pool
+        .query(`select regimenes.regimen from menus join regimenes on menus.regimen = regimenes.idregimen where menus.idmenu = $1`,[id])
+        .then(response => {
+            if(response.rows.length > 0){
+                res.status(200).json({res:response.rows})
+            }
+            else{
+                res.status(200).json({res:[]});
+            }
+        })
+        .catch(err => res.status(401).json({Error: err.message}))
+    } catch(e){
+        console.log(e);
+    }
+}
+
 const agregarRegimen = async (req, res) => {
     const regimen = req.body.regimen;
 
@@ -68,5 +87,6 @@ module.exports = {
     getRegimenes,
     getRegimenById,
     agregarRegimen,
-    eliminarRegimenById
+    eliminarRegimenById,
+    getRegimenByMenuId
 }

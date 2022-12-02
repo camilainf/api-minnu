@@ -14,32 +14,61 @@ const getRecetaById = async (req, res) => {
     res.status(200).json(response.rows);
 }
 
-/* const createReceta = async (req, res) => {
-
-    const {insumo, gramos} = req.body;
-    try {
+const crearNuevaReceta = async (req,res,next) => {
+    const {
+        nombre,
+        idTipoReceta,
+        insumos,
+    } = req.body
+    let idReceta = 0;
+    try{
         await pool
-            .query('SELECT * FROM INSUMOS WHERE INSUMO = $1', [insumo])
-            .then(response => {
-                if (response.rows.length > 0) {
-                    res.status(400).json({Error: 'Insumo ya se encuentra registrado'});
-                } else {
+            .query(`INSERT INTO recetas (receta, tiporeceta) VALUES ($1, $2) RETURNING idreceta`,[nombre,idTipoReceta])
+            .then(results => {
+                idReceta = results.rows[0].idreceta;
+                for(let i in insumos){    
                     pool
-                        .query(`INSERT INTO INSUMOS (GRAMOS, INSUMO) values ('${gramos}', '${insumo}') `)
-                        .then(response => {
-                            res.status(200).json({Res: 'Insumo agregado correctamente'});
+                        .query(`INSERT INTO detallereceta (receta,insumo)VALUES ($1, $2)`,[idReceta,insumos[i]])
+                        .then(results => {
+                            console.log(`insumo ${i}: ${insumos[i]} insertado a la receta`);
                         })
-                        .catch(err=> res.status(400).json({Error: err.message}));
+                        .catch(err => {
+                            console.log(err.message)
+                        })
+                }
+                res.status(200).json({res:'Insersion exitosa'});
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }catch(err){
+        console.log(err);
+    }
+}
+
+const eliminarReceta = ( req, res ) => {
+    const { idreceta } = req.body;
+    try{
+        pool
+            .query('DELETE FROM recetas WHERE idreceta = $1 RETURNING receta',[idreceta])
+            .then( response => {
+                console.log( response.rows )
+                if ( response.rows.length > 0) {
+                    res.status(200).json({res: 'Receta eliminada exitosamente'});
+                }
+                else{
+                    res.status(404).json({res:'No se encuentra la receta'})
                 }
             })
-            .catch(err=> res.status(400).json({Error: err.message}));
-    } catch (e) {
-        console.log(e);
+            .catch(err => res.status(400).json({Error:err.message}))
+    }catch(error){
+        console.log(error);
     }
-} */
+}
 
 module.exports = {
     getRecetas,
-    getRecetaById
-    /* creacionReceta */
+    getRecetaById,
+    crearNuevaReceta,
+    eliminarReceta
 }

@@ -9,7 +9,7 @@ const getTipoRecetaById = async (req, res) => {
     const id = req.params.id;
     try{
         pool
-        .query(`select tiposrecetas.tiporeceta
+        .query(`select tiposrecetas.tiporeceta, tiposrecetas.idtiporeceta
                 from recetas
                 join tiposrecetas on recetas.tiporeceta = tiposrecetas.idtiporeceta
                 where recetas.idreceta = $1`,[id])

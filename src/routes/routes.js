@@ -9,7 +9,7 @@ const { getRegimenes } = require('../controllers/regimen-controller/regimen-cont
 const { eliminarRegimenById } = require('../controllers/regimen-controller/regimen-controller');
 const { deleteInsumoById, createInsumo, editInsumo, getInsumos, getInsumoByRecipeId, getInsumoById } = require('../controllers/insumo-controller/insumo-controller');
 const { getTiposRecetas, getTipoRecetaById } = require('../controllers/tiposrecetas-controller/tiposrecetas.controller');
-const { getRecetas, getRecetaById, crearNuevaReceta, eliminarReceta } = require('../controllers/receta-controller/receta-controller');
+const { getRecetas, getRecetaById, crearNuevaReceta, eliminarReceta, editarReceta } = require('../controllers/receta-controller/receta-controller');
 const { getTiposMenus, getTipoMenuById, getTipoMenuByMenuID } = require('../controllers/tiposmenus-controller/tiposmenus.controller');
 const { getMenus, getMenuById } = require('../controllers/menu-controller/menu-controller');
 
@@ -32,6 +32,7 @@ router.get('/recetas', getRecetas);
 router.get('/recetas/:id', getRecetaById);
 router.post('/recetas', tokenValidator, crearNuevaReceta);
 router.delete('/recetas/', tokenValidator, eliminarReceta);
+router.put('/recetas', tokenValidator, editarReceta);
 
 // REGIMENES
 router.get('/regimenes', getRegimenes);

@@ -66,9 +66,30 @@ const eliminarReceta = ( req, res ) => {
     }
 }
 
+const editarReceta = ( req, res ) => {
+    const { idreceta, receta, tiporeceta } = req.body;
+    try{
+        pool
+            .query('Update recetas set receta = $2, tiporeceta = $3 WHERE idreceta = $1 RETURNING receta',[idreceta, receta, tiporeceta])
+            .then( response => {
+                console.log( response.rows )
+                if ( response.rows.length > 0) {
+                    res.status(200).json({res: 'Receta editada exitosamente'});
+                }
+                else{
+                    res.status(404).json({res:'No se encuentra la receta'})
+                }
+            })
+            .catch(err => res.status(400).json({Error:err.message}))
+    }catch(error){
+        console.log(error);
+    }
+}
+
 module.exports = {
     getRecetas,
     getRecetaById,
     crearNuevaReceta,
-    eliminarReceta
+    eliminarReceta,
+    editarReceta
 }

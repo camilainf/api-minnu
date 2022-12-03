@@ -58,11 +58,8 @@ const createInsumo = async (req, res) => {
 }
 
 const deleteInsumoById = async (req, res) => {
-    console.log('Hola')
     const {id} = req.params;
-
     const query = `DELETE FROM INSUMOS WHERE IDINSUMO = ${id} RETURNING INSUMO`;
-
     try {
         await pool
             .query (query)

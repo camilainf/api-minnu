@@ -24,14 +24,14 @@ router.get('/insumos', getInsumos);
 router.get('/insumos/:id', getInsumoById);
 router.get('/insumoss/:id', getInsumoByRecipeId);
 router.post('/insumos', tokenValidator ,createInsumo);
-router.delete('/insumos/', tokenValidator, deleteInsumoById);
+router.delete('/insumos/:id', tokenValidator, deleteInsumoById);
 router.put('/insumos/', tokenValidator, editInsumo);
 
 // RECETAS
 router.get('/recetas', getRecetas);
 router.get('/recetas/:id', getRecetaById);
 router.post('/recetas', tokenValidator, crearNuevaReceta);
-router.delete('/recetas/', tokenValidator, eliminarReceta);
+router.delete('/recetas/:id', tokenValidator, eliminarReceta);
 router.put('/recetas', tokenValidator, editarReceta);
 
 // REGIMENES

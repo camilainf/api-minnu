@@ -47,10 +47,10 @@ const crearNuevaReceta = async (req,res,next) => {
 }
 
 const eliminarReceta = ( req, res ) => {
-    const { idreceta } = req.body;
+    const { id } = req.params;
     try{
         pool
-            .query('DELETE FROM recetas WHERE idreceta = $1 RETURNING receta',[idreceta])
+            .query('DELETE FROM recetas WHERE idreceta = $1 RETURNING receta',[id])
             .then( response => {
                 console.log( response.rows )
                 if ( response.rows.length > 0) {

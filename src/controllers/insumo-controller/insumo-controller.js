@@ -1,7 +1,7 @@
 const pool = require('../../config/db.config');
 
 const getInsumos = async (req, res) => {
-    const response = await pool.query('SELECT * FROM INSUMOS');
+    const response = await pool.query('SELECT * FROM INSUMOS ORDER BY INSUMO ASC');
     res.status(200).json(response.rows);
 }
 
@@ -58,9 +58,10 @@ const createInsumo = async (req, res) => {
 }
 
 const deleteInsumoById = async (req, res) => {
-    const {idinsumo} = req.body;
+    console.log('Hola')
+    const {id} = req.params;
 
-    const query = `DELETE FROM INSUMOS WHERE IDINSUMO = ${idinsumo} RETURNING INSUMO`;
+    const query = `DELETE FROM INSUMOS WHERE IDINSUMO = ${id} RETURNING INSUMO`;
 
     try {
         await pool
@@ -74,7 +75,7 @@ const deleteInsumoById = async (req, res) => {
                 }
             })
             .catch(err => res.status(401).json({Error:err.message}))
-    } catch(e){
+    } catch(e) {
         console.log(e);
     } 
 }
@@ -89,7 +90,7 @@ const editInsumo = (req,res) => {
                     pool
                         .query('UPDATE INSUMOS SET INSUMO = $1, GRAMOS = $2 WHERE IDINSUMO = $3 RETURNING *',[insumo,gramos, idinsumo])
                         .then(response => {
-                            res.status(401).json({Res:'Insumo actualizado exitosamente',Insumo:response.rows[0]})
+                            res.status(200).json(response.rows[0]);
                         })
                         .catch(err => res.status(400).json({Error:err.message}))  
                 }

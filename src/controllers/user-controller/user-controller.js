@@ -48,6 +48,7 @@ const userRegister = async (req, res, next) => {
     const nombre = req.body.nombre;
     const email = req.body.email;
     const pass = req.body.pass;
+    const isadmin = false;
 
     console.log({nombre, email, pass});
 
@@ -61,7 +62,7 @@ const userRegister = async (req, res, next) => {
                 res.status(400).json({Error: 'Email ingresado ya se encuentra registrado'});
             } else {
                 pool
-                .query(`INSERT INTO USERS (nombre, email, pass) VALUES ($1, $2, $3)`, [nombre, email, hashPass])
+                .query(`INSERT INTO USERS (nombre, email, pass, isadmin) VALUES ($1, $2, $3, $4)`, [nombre, email, hashPass, isadmin])
                 .then(results => res.status(200).send({Res: 'Usuario registrado'}))
                 .catch(err => res.status(401).json({Error: err.message}))
             }
